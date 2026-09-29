@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Log {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  user_id    String
+  action     Action
+  entity     Entity
+  entity_id  String
+  details    Json?
+  User       User     @relation(fields: [user_id], references: [id])
+}
+
+model User {
+  id             String   @id
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  dni            String   @unique @db.VarChar(8)
+  name           String   @db.VarChar(100)
+  last_name      String   @db.VarChar(100)
+  email          String   @unique @db.VarChar(100)
+  password       String
+  role           Role
+  modules_access String[] @default([])
+  Logs           Log[]
+  is_active      Boolean  @default(true)
+  is_archived    Boolean  @default(false)
+}
+
+model Topic {
+  id              String     @id
+  created_at      DateTime   @default(now())
+  updated_at      DateTime   @updatedAt
+  name            String     @db.VarChar(100)
+  description     String?    @db.Text
+  documents       Document[]
+  documents_count Int        @default(0)
+  total_size      Decimal    @default(0) @db.Decimal(10, 3)
+  is_active       Boolean    @default(true)
+  is_archived     Boolean    @default(false)
+}
+
+model Document {
+  id          String   @id
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  name        String   @db.VarChar(100)
+  url         String   @db.VarChar(255)
+  description String   @db.Text
+  tags        String[] @db.Text
+  topic_id    String
+  topic       Topic    @relation(fields: [topic_id], references: [id])
+  size        Decimal  @db.Decimal(10, 3)
+  is_active   Boolean  @default(true)
+  is_archived Boolean  @default(false)
+}
+
+model Conversation {
+  id           String             @id
+  created_at   DateTime           @default(now())
+  completed_at DateTime?
+  last_run     DateTime?
+  total_runs   Int                @default(0)
+  total_tokens Int                @default(0)
+  status       ConversationStatus @default(ACTIVE)
+  runs         Run[]
+  title        String?            @db.VarChar(100)
+}
+
+model Run {
+  id                String       @id
+  created_at        DateTime     @default(now())
+  is_run_successful Boolean      @default(false)
+  model_llm         String       @db.VarChar(100)
+  latency           Decimal      @db.Decimal(10, 6)
+  tokens            Int
+  input             String       @db.Text
+  output            String       @db.Text
+  error             String?      @db.Text
+  conversation_id   String
+  conversation      Conversation @relation(fields: [conversation_id], references: [id])
+}
+
+model FAQ {
+  id          String   @id
+  created_at  DateTime @default(now())
+  question    String   @db.Text
+  answer      String   @db.Text
+  is_active   Boolean  @default(true)
+  is_archived Boolean  @default(false)
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum Action {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+enum Entity {
+  User
+  Document
+  Topic
+}
+
+enum ConversationStatus {
+  ACTIVE
+  CLOSED
+}

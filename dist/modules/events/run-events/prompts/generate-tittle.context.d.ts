@@ -1,0 +1,1 @@
+export declare const GENERATE_TITLE_CONTEXT = "- generar\u00E1s un t\u00EDtulo basado en el primer mensaje con el que el usuario inicia una conversaci\u00F3n\n- aseg\u00FArate de que no tenga m\u00E1s de 90 caracteres\n- el t\u00EDtulo debe ser un resumen del mensaje del usuario\n- no uses comillas ni dos puntos";

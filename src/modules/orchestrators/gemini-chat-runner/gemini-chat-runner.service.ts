@@ -52,7 +52,7 @@ export class GeminiChatRunnerService {
           const stream = this.ai.streamChatMessage(
             historial,
             message,
-            GeminiModels.GEMINI_2_0_FLASH,
+            GeminiModels.GEMINI_FLASH,
             ASSISTANT_INSTRUCTION,
           )
 

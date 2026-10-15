@@ -64,3 +64,8 @@ prisma/migrations/20250426221744_boolean_is_run_succesful/migration.sql
 prisma/migrations/20250426235407_change_latency_string_to_decimal_on_run_model/migration.sql
 prisma/migrations/20250429152804_add_columns_on_conversation_model/migration.sql
 prisma/migrations/20250429152933_default_value_con_total_tokens/migration.sql
+
+# Compilado de TypeScript: lo genera "npm run build" y Vercel lo rehace
+# al desplegar (buildCommand en vercel.json). Versionarlo llenaba cada
+# commit de .js y .js.map y tapaba los cambios reales de src/.
+/dist

@@ -45,7 +45,7 @@ export class OnRunExecuteHandler {
 
   private async generateTitle(input: string) {
     const response = await this.ai.getResponse(
-      GeminiModels.GEMINI_1_5_FLASH_8B,
+      GeminiModels.GEMINI_FLASH_LITE,
       GENERATE_TITLE_CONTEXT,
       [input],
     )
